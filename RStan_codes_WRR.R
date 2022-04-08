@@ -132,7 +132,7 @@ alpha_vals[i] = alpha[w];
 //Sum loadings from all sources
 tot =  A + D + W + C + H + Cw + Dch;
 //Add random effects to source loadings and subtract losses from upstream loads
-y_hat = tot + alpha_vals - up_t_load1 .* (1-(exp((-Sn ./ (1+PIC_q*av_prec)) .* str_loss_load1) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load1))) - up_t_load2 .* (1-(exp((-Sn ./ (1+PIC_q*av_prec)) .* str_loss_load2) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load2))) - up_t_load3 .* (1-(exp((-Sn ./(1+PIC_q*av_prec)) .* str_loss_load3) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load3)));
+y_hat = tot + 1000*alpha_vals - up_t_load1 .* (1-(exp((-Sn ./ (1+PIC_q*av_prec)) .* str_loss_load1) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load1))) - up_t_load2 .* (1-(exp((-Sn ./ (1+PIC_q*av_prec)) .* str_loss_load2) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load2))) - up_t_load3 .* (1-(exp((-Sn ./(1+PIC_q*av_prec)) .* str_loss_load3) .* exp((-Sn2 ./ (1+PIC_q*av_prec)) ./ res_loss_load3)));
 
 //priors
 Be_a ~ normal(100,65);  //Prior for agriculture
@@ -143,8 +143,8 @@ Be_ch ~ normal(0.005,0.0025);  //Prior for chickens
 Be_h ~ normal(0.02,0.01);  //Prior for hogs (swine)
 Be_cw ~ normal(0,5);  //Uninformed Prior for cows
 Be_dch ~ normal(1,.03);   //Prior for point source delivery
-sigma_res ~ normal(0,1000000); //st error of the model
-sigma_w ~ normal(0,1000000);     //st. deviation of random effect hyperdistribution
+sigma_res ~ normal(0,1000); //st error of the model
+sigma_w ~ normal(0,1000);     //st. deviation of random effect hyperdistribution
 alpha ~ normal(0,sigma_w);    //watershed random effects
 sigma_B1 ~ normal(0,.5);  //st. deviation of precipitation coefficient
 Bp_mean ~ normal(1,.5);    //mean PIC for hyperdistribution
@@ -158,7 +158,7 @@ pic_p[7] ~ normal(Bp_mean,sigma_B1);  //precipitation distribution for cow
 Sn ~ normal(.2,.08);    //Prior for stream retention rate
 Sn2 ~ normal(30,8.5);   //Prior for reservoir retention rate
 PIC_q ~ normal(0,1);    //prior for PIC for retention
-ly ~ normal(y_hat,sigma_res);        //parameter that calibrates ly_hat with ly () 
+ly ~ normal(y_hat/1000,sigma_res);        //parameter that calibrates ly_hat with ly () 
 load ~ normal(ly,SD);                // load = WRTDS estimate, SD = WRTDS sd
 }
 
